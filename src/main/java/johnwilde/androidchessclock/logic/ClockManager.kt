@@ -123,8 +123,8 @@ class ClockManager @Inject constructor(
             GameState.PLAYING, GameState.NEGATIVE -> {
                 // Switch turns (ignore taps on non-active button)
                 if (color == active().color) {
-                    startPlayerClock(forOtherColor(color))
                     timerForColor(color).moveEnd()
+                    startPlayerClock(timerForColor(color))
                 }
             }
             GameState.FINISHED -> { } // nothing
