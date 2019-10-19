@@ -28,6 +28,7 @@ class ClockManager @Inject constructor(
 ) {
 
     private lateinit var gameOver: Disposable
+    var multiPlayer = true
     var timeIsNegative: Boolean = false // At least one clock has gone negative
     val whiteDelegate = TimerDelegate(WHITE)
     val blackDelgate = TimerDelegate(BLACK)
@@ -102,6 +103,11 @@ class ClockManager @Inject constructor(
                 }
     }
 
+    fun switchMultiPlayer(): Boolean {
+        multiPlayer = !multiPlayer
+        return multiPlayer
+    }
+
     // Player button was hit
     fun clockButtonTap(color: ClockView.Color) {
         when (gameState()) {
@@ -123,8 +129,14 @@ class ClockManager @Inject constructor(
             GameState.PLAYING, GameState.NEGATIVE -> {
                 // Switch turns (ignore taps on non-active button)
                 if (color == active().color) {
-                    timerForColor(color).moveEnd()
-                    startPlayerClock(timerForColor(color))
+                    if (multiPlayer) {
+                        startPlayerClock(forOtherColor(color))
+                        timerForColor(color).moveEnd()
+                    }
+                    else {
+                        timerForColor(color).moveEnd()
+                        startPlayerClock(timerForColor(color))
+                    }
                 }
             }
             GameState.FINISHED -> { } // nothing

@@ -68,7 +68,9 @@ class MainActivity : MyMviActivity<MainView, MainViewPresenter>(), MainView,
             showResetDialog()
         }
         swap_sides.setOnClickListener {
-            swapSides()
+            var multiPlayer = clockManager.switchMultiPlayer()
+            var string = if (multiPlayer) "multi player" else "single player"
+            Toast.makeText(applicationContext, string, Toast.LENGTH_LONG).show()
         }
         menu_button.setOnClickListener {
             myDrawer.openDrawer()
